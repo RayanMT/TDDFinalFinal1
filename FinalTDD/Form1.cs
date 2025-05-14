@@ -20,7 +20,7 @@ namespace FinalTDD
         public Form1()
         {
             InitializeComponent();
-            this.Size = new Size(1000, 1200);
+            this.Size = new Size(600, 700); ;
 
             comboBox1.DrawItem += DrawComboBoxItem;
             comboBox2.DrawItem += DrawComboBoxItem;
@@ -36,6 +36,9 @@ namespace FinalTDD
 
             comboBox2.Items.Clear(); // Maintenance
             comboBox2.Items.AddRange(new string[] { "OK", "Needs Service" });
+
+            this.Load += Form1_Load;
+
 
         }
 
@@ -232,8 +235,17 @@ namespace FinalTDD
             e.DrawFocusRectangle();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Trick to force smaller height
+            comboBox1.DropDownStyle = ComboBoxStyle.Simple;
+            comboBox1.Height = 24; // set your desired height
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
 
-
+            comboBox2.DropDownStyle = ComboBoxStyle.Simple;
+            comboBox2.Height = 24;
+            comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
+        }
 
     }
 }
