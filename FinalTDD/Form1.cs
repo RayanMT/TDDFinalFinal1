@@ -53,6 +53,30 @@ namespace FinalTDD
                 string type = comboBox1.SelectedItem?.ToString() ?? "";
                 string maintenanceStatus = comboBox2.SelectedItem?.ToString() ?? "";
 
+                // ======== VALIDATIONS ========
+
+                // Vehicle Number: Must be digits only (7 or 8 digits)
+                if (!vehicleNumber.All(char.IsDigit))
+                {
+                    MessageBox.Show("Vehicle number must contain digits only.");
+                    return;
+                }
+                if (vehicleNumber.Length != 7 && vehicleNumber.Length != 8)
+                {
+                    MessageBox.Show("Vehicle number must be exactly 7 or 8 digits long.");
+                    return;
+                }
+
+                // Manufacturer: Only letters
+                if (!manufacturer.All(char.IsLetter))
+                {
+                    MessageBox.Show("Manufacturer must contain letters only.");
+                    return;
+                }
+
+                // Model: letters + numbers allowed (no validation needed here)
+
+                // Required fields check
                 if (string.IsNullOrEmpty(vehicleNumber) || string.IsNullOrEmpty(model) || string.IsNullOrEmpty(manufacturer)
                     || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(maintenanceStatus))
                 {
@@ -60,6 +84,15 @@ namespace FinalTDD
                     return;
                 }
 
+                // Model: Allow letters, numbers, spaces. Disallow symbols.
+                if (!model.All(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)))
+                {
+                    MessageBox.Show("Model name can only contain letters, numbers, and spaces.");
+                    return;
+                }
+
+
+                // ======== ADD VEHICLE ========
                 var newVehicle = new Vehicle(
                     "Vehicle Number " + vehicleNumber,
                     "Model " + model,
@@ -79,6 +112,7 @@ namespace FinalTDD
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
 
         private void SaveVehicleToExcel(Vehicle vehicle)
         {

@@ -25,19 +25,19 @@ namespace FinalTDDTests
             Assert.AreEqual(2015, avg);
         }
 
-        // ❌ FAIL: Intentionally wrong expected value
         [TestMethod]
-        public void CalculateAverageYear_ShouldFail_WhenExpectedIsWrong()
+        public void CalculateAverageYear_ShouldReturnCorrectAverage_WhenGivenValidInput()
         {
             var vehicles = new List<Vehicle>
-            {
-                new Vehicle("1", "ModelA", "MakeA", 2010, "Bus", "OK"),
-                new Vehicle("2", "ModelB", "MakeB", 2020, "Truck", "OK")
-            };
+    {
+        new Vehicle("1", "ModelA", "MakeA", 2010, "Bus", "OK"),
+        new Vehicle("2", "ModelB", "MakeB", 2020, "Truck", "OK")
+    };
 
             double avg = AverageHelper.CalculateAverageYear(vehicles);
-            Assert.AreEqual(2020, avg); // Wrong on purpose
+            Assert.AreEqual(2015, avg); // ✅ Fixed Expected Value
         }
+
 
         // ✅ PASS: Empty list returns 0
         [TestMethod]

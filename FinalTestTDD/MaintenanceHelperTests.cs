@@ -26,18 +26,18 @@ namespace FinalTDDTests
             Assert.AreEqual(2, count);
         }
 
-        // ❌ FAIL: Expected wrong count
         [TestMethod]
-        public void CountNeedsService_ShouldFail_WhenExpectedIsWrong()
+        public void CountNeedsService_ShouldReturnCorrectCount_WhenGivenValidInput()
         {
             var vehicles = new List<Vehicle>
-            {
-                new Vehicle("1", "A", "B", 2010, "Bus", "OK"),
-                new Vehicle("2", "C", "D", 2015, "Truck", "Needs Service")
-            };
+    {
+        new Vehicle("1", "A", "B", 2010, "Bus", "OK"),
+        new Vehicle("2", "C", "D", 2015, "Truck", "Needs Service")
+    };
 
             int count = MaintenanceHelper.CountNeedsService(vehicles);
-            Assert.AreEqual(0, count); // Wrong on purpose
+            Assert.AreEqual(1, count); // ✅ Fixed Expected Value
         }
+
     }
 }
