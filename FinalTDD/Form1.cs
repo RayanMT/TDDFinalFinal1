@@ -44,74 +44,60 @@ namespace FinalTDD
 
         private void btnAddVehicle_Click(object sender, EventArgs e)
         {
-            try
+            string vehicleNumber = textBox1.Text.Trim();
+            string model = textBox3.Text.Trim();
+            string manufacturer = textBox2.Text.Trim();
+            int year = (int)numericUpDown1.Value;
+            string type = comboBox1.SelectedItem?.ToString() ?? "";
+            string maintenanceStatus = comboBox2.SelectedItem?.ToString() ?? "";
+
+            // 🔒 First, check if ANY field is empty
+            if (string.IsNullOrEmpty(vehicleNumber) ||
+                string.IsNullOrEmpty(model) ||
+                string.IsNullOrEmpty(manufacturer) ||
+                string.IsNullOrEmpty(type) ||
+                string.IsNullOrEmpty(maintenanceStatus))
             {
-                string vehicleNumber = textBox1.Text.Trim();
-                string model = textBox3.Text.Trim();
-                string manufacturer = textBox2.Text.Trim();
-                int year = (int)numericUpDown1.Value;
-                string type = comboBox1.SelectedItem?.ToString() ?? "";
-                string maintenanceStatus = comboBox2.SelectedItem?.ToString() ?? "";
-
-                // ======== VALIDATIONS ========
-
-                // Vehicle Number: Must be digits only (7 or 8 digits)
-                if (!vehicleNumber.All(char.IsDigit))
-                {
-                    MessageBox.Show("Vehicle number must contain digits only.");
-                    return;
-                }
-                if (vehicleNumber.Length != 7 && vehicleNumber.Length != 8)
-                {
-                    MessageBox.Show("Vehicle number must be exactly 7 or 8 digits long.");
-                    return;
-                }
-
-                // Manufacturer: Only letters
-                if (!manufacturer.All(char.IsLetter))
-                {
-                    MessageBox.Show("Manufacturer must contain letters only.");
-                    return;
-                }
-
-                // Model: letters + numbers allowed (no validation needed here)
-
-                // Required fields check
-                if (string.IsNullOrEmpty(vehicleNumber) || string.IsNullOrEmpty(model) || string.IsNullOrEmpty(manufacturer)
-                    || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(maintenanceStatus))
-                {
-                    MessageBox.Show("Please fill in all fields.");
-                    return;
-                }
-
-                // Model: Allow letters, numbers, spaces. Disallow symbols.
-                if (!model.All(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)))
-                {
-                    MessageBox.Show("Model name can only contain letters, numbers, and spaces.");
-                    return;
-                }
-
-
-                // ======== ADD VEHICLE ========
-                var newVehicle = new Vehicle(
-                    "Vehicle Number " + vehicleNumber,
-                    "Model " + model,
-                    "Manufacturer " + manufacturer,
-                    year,
-                    "Type " + type,
-                    "Maintenance Status " + maintenanceStatus);
-
-                vehicles.Add(newVehicle);
-
-                SaveVehicleToExcel(newVehicle);
-
-                MessageBox.Show("Vehicle added successfully!");
+                MessageBox.Show("Please fill in all fields before adding the vehicle.");
+                return;
             }
-            catch (Exception ex)
+
+            // 🚓 Validate Vehicle Number: digits only, 7 or 8 digits
+            if (!vehicleNumber.All(char.IsDigit))
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Vehicle number must contain digits only.");
+                return;
             }
+            if (vehicleNumber.Length != 7 && vehicleNumber.Length != 8)
+            {
+                MessageBox.Show("Vehicle number must be exactly 7 or 8 digits long.");
+                return;
+            }
+
+            // 🚙 Validate Model: allow letters, digits, and spaces only
+            if (!model.All(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)))
+            {
+                MessageBox.Show("Model name can only contain letters, numbers, and spaces.");
+                return;
+            }
+
+            // 🏭 Validate Manufacturer: letters only
+            if (!manufacturer.All(char.IsLetter))
+            {
+                MessageBox.Show("Manufacturer name can only contain letters.");
+                return;
+            }
+
+            // 🔠 Capitalize Manufacturer
+            manufacturer = char.ToUpper(manufacturer[0]) + manufacturer.Substring(1).ToLower();
+
+            // ✅ Everything is valid, create and add the vehicle
+            var newVehicle = new Vehicle(vehicleNumber, model, manufacturer, year, type, maintenanceStatus);
+            vehicles.Add(newVehicle);
+            SaveVehicleToExcel(newVehicle);
+            MessageBox.Show("Vehicle added successfully!");
         }
+
 
 
         private void SaveVehicleToExcel(Vehicle vehicle)
